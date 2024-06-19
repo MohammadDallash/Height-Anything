@@ -2,3 +2,6 @@
 *.mp4
 *.jpg
 *.pt
+*.pyc
+*.png
+*.pth
