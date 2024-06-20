@@ -3,6 +3,7 @@ import numpy as np
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 
+
 class CameraCalibrateApp:
     def __init__(self, video_path):
         self.video_path = video_path
@@ -15,7 +16,7 @@ class CameraCalibrateApp:
 
     def init_ui(self):
         if not self.show_instructions():
-            exit()
+            return None
 
         self.reset_drawing_window()
         cv2.namedWindow('Draw Line')
@@ -61,7 +62,7 @@ class CameraCalibrateApp:
             cv2.line(self.frame, self.line_start, self.line_end, (0, 0, 255), 2)
             height = self.get_line_height()
             midpoint = ((self.line_start[0] + self.line_end[0]) // 2, (self.line_start[1] + self.line_end[1]) // 2)
-            cv2.putText(self.frame, f"{height:.2f}m", midpoint, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+            cv2.putText(self.frame, f"{height:.2f}cm", midpoint, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             self.lines.append((self.line_start, self.line_end, height))
             self.line_start = None
             self.line_end = None
@@ -69,7 +70,7 @@ class CameraCalibrateApp:
     def get_line_height(self):
         root = tk.Tk()
         root.withdraw()  # Hide the main window
-        height = simpledialog.askfloat("Input", "Enter the real height of the line in meters:")
+        height = simpledialog.askfloat("Input", "Enter the real height of the line in cm:")
         root.destroy()
         return height
     def show_instructions(self):
@@ -77,7 +78,7 @@ class CameraCalibrateApp:
         root.withdraw()  # Hide the main window
         response = messagebox.askokcancel("Instructions",
                                         "Instructions:\n\n"
-                                        "1. Draw vertical lines on the object of known height in the video.\n"
+                                        "1. Draw vertical lines on the object of known height in the video by dragging the mouse.\n"
                                         "2. Press 'Enter' after each line to add it.\n"
                                         "3. You can press 'Esc' to reset and start over.\n"
                                         "4. Make sure to choose ONLY vertical objects for accurate calibration.\n"
@@ -111,9 +112,14 @@ class CameraCalibrateApp:
 
     def start(self):
         self.reset_drawing_window()
-        self.init_ui()
+
+        will_break = self.init_ui()
         
-        results = []
-        for start, end, height in self.lines:
-            results.append((start, end, height))
-        return results, self.original_frame
+        if will_break == True:
+            return None
+        
+
+        ground_truth_lines = []
+        for start, end, real_height in self.lines:
+            ground_truth_lines.append((start, end, real_height))
+        return ground_truth_lines, self.original_frame
