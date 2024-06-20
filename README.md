@@ -4,7 +4,7 @@ HeightAnything is a framework built on top of the state-of-the-art depth estimat
 
 
 
-![forShare (online-video-cutter com) (1)](https://github.com/MohammadDallash/Height-Anything/assets/105324962/fc77da08-0d55-4aba-9595-c56d3b704b0e)
+![forShare (online-video-cutter com) (2)](https://github.com/MohammadDallash/Height-Anything/assets/105324962/85539a1c-45db-41ee-82ab-a9fa8acbb256)
 
 ## Usage
 
